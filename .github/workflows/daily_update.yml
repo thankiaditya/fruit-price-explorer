@@ -66,14 +66,14 @@ jobs:
           git push
       
       - name: Upload artifact for Pages deployment
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: data
           path: fruit_prices_clean.csv
           retention-days: 1
       
       - name: Publish to GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
       
       - name: Log summary
         run: |
