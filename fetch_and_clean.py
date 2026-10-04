@@ -26,7 +26,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-DATA_GOV_API_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a5c3-375cda054661"
+MANDI_API_URL = "https://mandi-api.vercel.app/v1/prices"
+MANDI_HISTORY_URL = "https://mandi-api.vercel.app/v1/prices/history"
 OUTPUT_CSV = "fruit_prices_clean.csv"
 ARCHIVE_CSV = "fruit_prices_raw.csv"
 
@@ -118,7 +119,7 @@ class FruitPriceProcessor:
     """Handles data fetching, cleaning, and aggregation"""
     
     def __init__(self, api_key: str = None):
-        self.api_key = api_key or os.getenv('DATA_GOV_API_KEY', '')
+        # api_key kept for compatibility but not required — Mandi API is keyless
         self.oni = ONILookup()
         self.fruit_standardizer = self._create_fruit_mapping()
     
@@ -132,41 +133,48 @@ class FruitPriceProcessor:
     
     def fetch_from_api(self, date: datetime = None) -> pd.DataFrame:
         """
-        Fetch data from data.gov.in API
-        If date is None, fetches yesterday's data
+        Fetch data from Mandi Price API (mandi-api.vercel.app)
+        Free, no API key required, daily synced from data.gov.in
+        If date is None, fetches latest available data
         """
         if date is None:
             date = datetime.now() - timedelta(days=1)
-        
+
         date_str = date.strftime('%Y-%m-%d')
-        logger.info(f"Fetching data for {date_str}...")
-        
-        try:
-            # data.gov.in API endpoint for agricultural commodity prices
-            params = {
-                'api-key': self.api_key,
-                'format': 'json',
-                'limit': 10000,
-                'filters[arrival_date]': date_str
-            }
-            
-            response = requests.get(DATA_GOV_API_URL, params=params, timeout=30)
-            response.raise_for_status()
-            
-            data = response.json()
-            records = data.get('records', [])
-            
-            if not records:
-                logger.warning(f"No records found for {date_str}")
-                return pd.DataFrame()
-            
-            df = pd.DataFrame(records)
-            logger.info(f"Fetched {len(df)} raw records for {date_str}")
-            return df
-        
-        except Exception as e:
-            logger.error(f"API fetch failed: {e}")
+        logger.info(f"Fetching mandi price data for {date_str}...")
+
+        fruits_to_fetch = list(FRUIT_MAPPING.keys())
+        states_to_fetch = TOP_STATES
+        all_records = []
+
+        # Mandi API supports filtering by state and commodity
+        for state in states_to_fetch:
+            try:
+                params = {'state': state}
+                response = requests.get(MANDI_API_URL, params=params, timeout=30)
+                response.raise_for_status()
+                data = response.json()
+
+                # Mandi API returns list directly or under a key
+                records = data if isinstance(data, list) else data.get('data', data.get('records', []))
+
+                if records:
+                    for r in records:
+                        r['state'] = r.get('state', state)
+                    all_records.extend(records)
+                    logger.info(f"  {state}: {len(records)} records")
+
+            except Exception as e:
+                logger.warning(f"  {state}: fetch failed — {e}")
+                continue
+
+        if not all_records:
+            logger.warning("No records returned from Mandi API")
             return pd.DataFrame()
+
+        df = pd.DataFrame(all_records)
+        logger.info(f"Fetched {len(df)} total raw records")
+        return df
     
     def standardize_fruit(self, fruit_name: str) -> str:
         """Map fruit name to standardized name"""
@@ -187,21 +195,32 @@ class FruitPriceProcessor:
         
         logger.info("Cleaning data...")
         
-        # Standardize column names (data.gov.in may vary)
+        # Standardize column names
         df.columns = df.columns.str.lower().str.strip()
-        
+
+        # Mandi API field aliases → normalize to standard names
+        col_aliases = {
+            'arrival_date': 'date', 'arrivaldate': 'date', 'price_date': 'date',
+            'commodity': 'commodity', 'commodity_name': 'commodity', 'crop': 'commodity',
+            'modal_price': 'modal_price', 'modalprice': 'modal_price',
+            'modal price': 'modal_price', 'price': 'modal_price',
+            'state': 'state', 'state_name': 'state',
+        }
+        df.rename(columns=col_aliases, inplace=True)
+
         # Keep relevant columns
-        required_cols = ['arrival_date', 'commodity', 'state', 'modal_price']
+        required_cols = ['commodity', 'state', 'modal_price']
         missing_cols = [col for col in required_cols if col not in df.columns]
-        
+
         if missing_cols:
-            logger.error(f"Missing required columns: {missing_cols}")
+            logger.error(f"Missing required columns: {missing_cols}. Got: {list(df.columns)}")
             return pd.DataFrame()
-        
-        df = df[required_cols].copy()
-        
-        # Parse dates
-        df['date'] = pd.to_datetime(df['arrival_date'], errors='coerce')
+
+        # Parse dates — use today if no date column present
+        if 'date' in df.columns:
+            df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        else:
+            df['date'] = pd.Timestamp.now().normalize()
         df = df[df['date'].notna()]
         
         # Standardize fruit names
