@@ -2,114 +2,86 @@ name: Daily Fruit Price Data Update
 
 on:
   schedule:
-    # Run every day at 10 AM UTC (after data.gov.in usually updates)
     - cron: '0 10 * * *'
-  
-  # Allow manual trigger
   workflow_dispatch:
 
 jobs:
   fetch-and-update:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     permissions:
       contents: write
       pages: write
       id-token: write
-    
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests pandas numpy
-      
+
       - name: Run data pipeline
         env:
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
         run: |
           python fetch_and_clean.py
-      
+
       - name: Check if data changed
         id: data_check
         run: |
-          if git diff --quiet fruit_prices_clean.csv; then
+          if git diff --quiet fruit_prices_clean.csv 2>/dev/null || [ ! -f fruit_prices_clean.csv ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "✓ No new data to commit"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "✓ Data updated, will commit"
           fi
-      
+
       - name: Commit and push if data changed
         if: steps.data_check.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Fruit Price Bot"
-          
-          # Get the date and record count
           ROWS=$(wc -l < fruit_prices_clean.csv)
-          LAST_DATE=$(tail -1 fruit_prices_clean.csv | cut -d',' -f1)
-          
           git add fruit_prices_clean.csv
-          git commit -m "feat: update fruit prices - $(date +'%Y-%m-%d') (${ROWS} rows, last update: ${LAST_DATE})"
+          git commit -m "data: update fruit prices $(date +'%Y-%m-%d') — $((ROWS - 1)) rows"
           git push
-      
-      - name: Upload artifact for Pages deployment
-        uses: actions/upload-artifact@v4
-        with:
-          name: data
-          path: fruit_prices_clean.csv
-          retention-days: 1
-      
-      - name: Publish to GitHub Pages
-        uses: actions/deploy-pages@v4
-      
-      - name: Log summary
+
+      - name: Prepare Pages folder
         run: |
-          echo "## Fruit Price Pipeline Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Execution Time**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**Data Status**: $([ '${{ steps.data_check.outputs.changed }}' = 'true' ] && echo '✓ Updated' || echo '○ No changes')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
+          mkdir -p _site
+          cp fruit_price_explorer.html _site/index.html 2>/dev/null || echo "<h1>Data updated — upload your HTML file to the repo</h1>" > _site/index.html
+          cp fruit_prices_clean.csv _site/ 2>/dev/null || true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summary
+        run: |
+          echo "## Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Run: $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- Data changed: ${{ steps.data_check.outputs.changed }}" >> $GITHUB_STEP_SUMMARY
           if [ -f fruit_prices_clean.csv ]; then
             ROWS=$(wc -l < fruit_prices_clean.csv)
-            LAST_DATE=$(tail -1 fruit_prices_clean.csv | cut -d',' -f1)
-            echo "**Dataset Info**:" >> $GITHUB_STEP_SUMMARY
-            echo "- Total Rows: $((ROWS - 1))" >> $GITHUB_STEP_SUMMARY
-            echo "- Latest Date: $LAST_DATE" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ -f fruit_price_pipeline.log ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Pipeline Log**:" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            tail -20 fruit_price_pipeline.log >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          fi
-      
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "## ⚠️ Pipeline Failed" >> $GITHUB_STEP_SUMMARY
-          echo "Check the logs above for details." >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f fruit_price_pipeline.log ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Error Log**:" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            tail -50 fruit_price_pipeline.log >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Total rows: $((ROWS - 1))" >> $GITHUB_STEP_SUMMARY
           fi
