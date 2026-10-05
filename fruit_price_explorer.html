@@ -126,7 +126,14 @@
   .sort-row select { flex: 1; }
 
   /* ── Main panel ── */
-  .panel { padding: 28px 32px; display: flex; flex-direction: column; gap: 28px; overflow: hidden; }
+  .panel { 
+    padding: 28px 32px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 24px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
   /* ── Stat cards ── */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -152,13 +159,17 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px;
+    height: 340px;
+    display: flex;
+    flex-direction: column;
   }
-  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-shrink: 0; }
   .chart-header h2 { font-size: 0.9rem; font-weight: 500; color: var(--text); }
   .legend { display: flex; gap: 16px; font-size: 0.72rem; color: var(--muted); align-items: center; }
   .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
 
-  canvas { width: 100% !important; }
+  #price-chart { flex: 1; min-height: 0; }
+  canvas { width: 100% !important; height: 100% !important; }
 
   /* ── Table ── */
   .table-wrap {
@@ -166,6 +177,9 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: auto;
+    max-height: 280px;
+    display: flex;
+    flex-direction: column;
   }
   .table-header {
     padding: 14px 20px;
