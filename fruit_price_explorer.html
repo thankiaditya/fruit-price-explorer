@@ -32,7 +32,6 @@
     padding: env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
   }
 
-  /* ── Header ── */
   header {
     padding: 28px 32px 20px;
     border-bottom: 1px solid var(--border);
@@ -41,56 +40,28 @@
     gap: 24px;
     flex-wrap: wrap;
   }
-  .logo-block h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: #fff;
-  }
-  .logo-block p {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-  .header-badges {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-left: auto;
-    align-items: center;
-  }
-  .badge {
-    font-size: 0.72rem;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-  }
+  .logo-block h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+  .logo-block p { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+  .header-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-left: auto; align-items: center; }
+  .badge { font-size: 0.72rem; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; }
   .badge.el { border-color: var(--accent); color: var(--accent); }
 
-  /* ── Layout ── */
   .main { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 85px); }
 
-  /* ── Sidebar ── */
   aside {
     border-right: 1px solid var(--border);
     padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
+    overflow: hidden;
+    min-width: 0;
   }
-  .filter-group label {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
+  .filter-group label { display: block; font-size: 0.7rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
   select, input[type="text"], input[type="date"] {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background: var(--surface2);
     border: 1px solid var(--border);
     color: var(--text);
@@ -99,192 +70,70 @@
     font-family: inherit;
     font-size: 0.82rem;
     appearance: none;
+    -webkit-appearance: none;
     outline: none;
     transition: border-color 0.15s;
   }
   select:focus, input:focus { border-color: var(--green); }
-
-  .date-row { display: flex; gap: 6px; }
-  .date-row input { flex: 1; }
-
-  .btn {
-    width: 100%;
-    padding: 9px;
-    border-radius: var(--radius);
-    border: none;
-    font-family: inherit;
-    font-size: 0.82rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
+  .date-row { display: flex; flex-direction: column; gap: 6px; }
+  .date-row input { width: 100%; font-size: 0.75rem; padding: 7px 8px; }
+  .date-row .date-label { font-size: 0.65rem; color: var(--muted); margin-bottom: -2px; }
+  .btn { width: 100%; padding: 9px; border-radius: var(--radius); border: none; font-family: inherit; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
   .btn:hover { opacity: 0.85; }
   .btn-primary { background: var(--green); color: #0d1f14; }
   .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); margin-top: 4px; }
-
   .sort-row { display: flex; gap: 6px; }
   .sort-row select { flex: 1; }
 
-  /* ── Main panel ── */
-  .panel { 
-    padding: 28px 32px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 24px; 
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+  .panel { padding: 28px 32px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; overflow-x: hidden; }
 
-  /* ── Stat cards ── */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-  }
-  .stat-card .val {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-  }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .stat-card .val { font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700; color: #fff; }
   .stat-card .lbl { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
   .stat-card.el-nino { border-color: var(--el-nino-b); background: var(--el-nino); }
   .stat-card.el-nino .val { color: var(--accent); }
 
-  /* ── Chart ── */
-  .chart-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    height: 340px;
-    display: flex;
-    flex-direction: column;
-  }
-  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-shrink: 0; }
+  .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .chart-header h2 { font-size: 0.9rem; font-weight: 500; color: var(--text); }
   .legend { display: flex; gap: 16px; font-size: 0.72rem; color: var(--muted); align-items: center; }
   .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+  .chart-canvas-wrap { position: relative; height: 240px; width: 100%; overflow: hidden; }
+  .chart-canvas-wrap canvas { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
 
-  #price-chart { flex: 1; min-height: 0; }
-  canvas { width: 100% !important; height: 100% !important; }
-
-  /* ── Table ── */
-  .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: auto;
-    max-height: 280px;
-    display: flex;
-    flex-direction: column;
-  }
-  .table-header {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: auto; max-height: 280px; display: flex; flex-direction: column; }
+  .table-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .table-header h2 { font-size: 0.9rem; font-weight: 500; }
   .row-count { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; }
-
   table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-  th {
-    text-align: left;
-    padding: 10px 20px;
-    font-size: 0.68rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-  }
+  th { text-align: left; padding: 10px 20px; font-size: 0.68rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
   th:hover { color: var(--text); }
   td { padding: 9px 20px; border-bottom: 1px solid rgba(42,74,52,0.5); }
   tr:last-child td { border-bottom: none; }
   tr.el-nino-row { background: var(--el-nino); }
   tr:hover td { background: var(--surface2); }
-
-  .pill {
-    font-size: 0.65rem;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-family: 'Space Mono', monospace;
-  }
+  .pill { font-size: 0.65rem; padding: 2px 7px; border-radius: 10px; font-family: 'Space Mono', monospace; }
   .pill.el { background: rgba(245,166,35,0.2); color: var(--accent); border: 1px solid var(--el-nino-b); }
   .pill.neutral { background: var(--surface2); color: var(--muted); }
 
-  /* ── Sort timing ── */
-  .timing-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
+  .timing-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
   .timing-wrap h2 { font-size: 0.9rem; font-weight: 500; margin-bottom: 14px; }
   .timing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .timing-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-  }
+  .timing-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
   .timing-card .algo { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; }
   .timing-card .ms { font-size: 1.2rem; font-weight: 600; color: #fff; font-family: 'Space Mono', monospace; margin-top: 4px; }
   .timing-card .note { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
 
-  /* ── Loading / empty states ── */
-  .loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    padding: 60px;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-  .spinner {
-    width: 28px; height: 28px;
-    border: 2px solid var(--border);
-    border-top-color: var(--green);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+  .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 60px; color: var(--muted); font-size: 0.85rem; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 0.82rem; }
 
-  /* ── Pagination ── */
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 12px 20px;
-    border-top: 1px solid var(--border);
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-  .page-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 5px 12px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 0.78rem;
-  }
+  .pagination { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); }
+  .page-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 5px 12px; border-radius: var(--radius); cursor: pointer; font-size: 0.78rem; }
   .page-btn:disabled { opacity: 0.3; cursor: default; }
-  .page-btn.active { background: var(--green); color: #0d1f14; border-color: var(--green); }
 
-  /* ── Responsive ── */
   @media (max-width: 800px) {
     .main { grid-template-columns: 1fr; }
     aside { border-right: none; border-bottom: 1px solid var(--border); }
@@ -312,26 +161,21 @@
   <aside>
     <div class="filter-group">
       <label>Fruit</label>
-      <select id="sel-fruit">
-        <option value="">All fruits</option>
-      </select>
+      <select id="sel-fruit"><option value="">All fruits</option></select>
     </div>
-
     <div class="filter-group">
       <label>State</label>
-      <select id="sel-state">
-        <option value="">All states</option>
-      </select>
+      <select id="sel-state"><option value="">All states</option></select>
     </div>
-
     <div class="filter-group">
       <label>Date range</label>
       <div class="date-row">
-        <input type="date" id="date-from" title="From">
-        <input type="date" id="date-to" title="To">
+        <span class="date-label">From</span>
+        <input type="date" id="date-from">
+        <span class="date-label">To</span>
+        <input type="date" id="date-to">
       </div>
     </div>
-
     <div class="filter-group">
       <label>El Niño filter</label>
       <select id="sel-elnino">
@@ -340,7 +184,6 @@
         <option value="0">Non El Niño only</option>
       </select>
     </div>
-
     <div class="filter-group">
       <label>Sort by</label>
       <div class="sort-row">
@@ -355,7 +198,6 @@
         </select>
       </div>
     </div>
-
     <div class="filter-group">
       <label>Sort algorithm</label>
       <select id="sel-algo">
@@ -363,10 +205,8 @@
         <option value="quick">Quick sort</option>
       </select>
     </div>
-
     <button class="btn btn-primary" onclick="applyFilters()">Apply filters</button>
     <button class="btn btn-ghost" onclick="resetFilters()">Reset</button>
-
     <div class="filter-group">
       <label>Exact date lookup</label>
       <input type="date" id="date-lookup">
@@ -380,29 +220,13 @@
       <div class="spinner"></div>
       Fetching latest prices…
     </div>
-
-    <div id="content" style="display:none;display:flex;flex-direction:column;gap:28px">
-      <!-- Stats -->
+    <div id="content" style="display:none">
       <div class="stats">
-        <div class="stat-card">
-          <div class="val" id="stat-rows">—</div>
-          <div class="lbl">Rows in view</div>
-        </div>
-        <div class="stat-card">
-          <div class="val" id="stat-avg">—</div>
-          <div class="lbl">Avg price ₹/kg</div>
-        </div>
-        <div class="stat-card">
-          <div class="val" id="stat-fruits">—</div>
-          <div class="lbl">Fruits tracked</div>
-        </div>
-        <div class="stat-card el-nino">
-          <div class="val" id="stat-elnino-pct">—</div>
-          <div class="lbl">El Niño rows</div>
-        </div>
+        <div class="stat-card"><div class="val" id="stat-rows">—</div><div class="lbl">Rows in view</div></div>
+        <div class="stat-card"><div class="val" id="stat-avg">—</div><div class="lbl">Avg price ₹/kg</div></div>
+        <div class="stat-card"><div class="val" id="stat-fruits">—</div><div class="lbl">Fruits tracked</div></div>
+        <div class="stat-card el-nino"><div class="val" id="stat-elnino-pct">—</div><div class="lbl">El Niño rows</div></div>
       </div>
-
-      <!-- Chart -->
       <div class="chart-wrap">
         <div class="chart-header">
           <h2>Monthly median price</h2>
@@ -411,33 +235,18 @@
             <span><span class="legend-dot" style="background:var(--accent);opacity:0.6"></span>El Niño month</span>
           </div>
         </div>
-        <canvas id="price-chart" height="220"></canvas>
+        <div class="chart-canvas-wrap"><canvas id="price-chart"></canvas></div>
       </div>
-
-      <!-- Table -->
       <div class="table-wrap">
-        <div class="table-header">
-          <h2>Price records</h2>
-          <span class="row-count" id="tbl-count">—</span>
-        </div>
+        <div class="table-header"><h2>Price records</h2><span class="row-count" id="tbl-count">—</span></div>
         <div id="tbl-container"></div>
         <div class="pagination" id="pagination"></div>
       </div>
-
-      <!-- Sort timing -->
       <div class="timing-wrap">
         <h2>Sort algorithm timing</h2>
         <div class="timing-grid">
-          <div class="timing-card">
-            <div class="algo">Merge sort</div>
-            <div class="ms" id="time-merge">—</div>
-            <div class="note">Stable · O(n log n)</div>
-          </div>
-          <div class="timing-card">
-            <div class="algo">Quick sort</div>
-            <div class="ms" id="time-quick">—</div>
-            <div class="note">In-place · O(n log n) avg</div>
-          </div>
+          <div class="timing-card"><div class="algo">Merge sort</div><div class="ms" id="time-merge">—</div><div class="note">Stable · O(n log n)</div></div>
+          <div class="timing-card"><div class="algo">Quick sort</div><div class="ms" id="time-quick">—</div><div class="note">In-place · O(n log n) avg</div></div>
         </div>
       </div>
     </div>
@@ -446,17 +255,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// ── Config ──────────────────────────────────────────────────────────────────
 const CSV_URL = 'fruit_prices_clean.csv';
 const PAGE_SIZE = 50;
+let allData = [], filtered = [], currentPage = 0, chart = null;
 
-// ── State ────────────────────────────────────────────────────────────────────
-let allData = [];
-let filtered = [];
-let currentPage = 0;
-let chart = null;
-
-// ── CSV parser ───────────────────────────────────────────────────────────────
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.trim());
@@ -464,34 +266,27 @@ function parseCSV(text) {
     const vals = line.split(',');
     const obj = {};
     headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
-    obj.modal_price = parseFloat(obj.modal_price) || 0;
-    obj.is_el_nino  = obj.is_el_nino === 'True' || obj.is_el_nino === 'true' || obj.is_el_nino === '1';
+    obj.modal_price = (parseFloat(obj.modal_price) || 0) / 100;
+    obj.is_el_nino = obj.is_el_nino === 'True' || obj.is_el_nino === 'true' || obj.is_el_nino === '1';
     obj.oni_strength = parseInt(obj.oni_strength) || 0;
     return obj;
   }).filter(r => r.date && r.modal_price > 0);
 }
 
-// ── Sort algorithms ──────────────────────────────────────────────────────────
 function mergeSort(arr, key) {
   if (arr.length <= 1) return arr;
   const mid = Math.floor(arr.length / 2);
   const L = mergeSort(arr.slice(0, mid), key);
   const R = mergeSort(arr.slice(mid), key);
-  const out = [];
-  let i = 0, j = 0;
-  while (i < L.length && j < R.length) {
-    out.push(L[i][key] <= R[j][key] ? L[i++] : R[j++]);
-  }
+  const out = []; let i = 0, j = 0;
+  while (i < L.length && j < R.length) out.push(L[i][key] <= R[j][key] ? L[i++] : R[j++]);
   return out.concat(L.slice(i)).concat(R.slice(j));
 }
 
 function quickSort(arr, key, lo = 0, hi = arr.length - 1) {
   if (lo < hi) {
-    const pivot = arr[hi][key];
-    let i = lo - 1;
-    for (let j = lo; j < hi; j++) {
-      if (arr[j][key] <= pivot) { i++; [arr[i], arr[j]] = [arr[j], arr[i]]; }
-    }
+    const pivot = arr[hi][key]; let i = lo - 1;
+    for (let j = lo; j < hi; j++) if (arr[j][key] <= pivot) { i++; [arr[i], arr[j]] = [arr[j], arr[i]]; }
     [arr[i+1], arr[hi]] = [arr[hi], arr[i+1]];
     const p = i + 1;
     quickSort(arr, key, lo, p - 1);
@@ -503,271 +298,169 @@ function quickSort(arr, key, lo = 0, hi = arr.length - 1) {
 function sortData(data, field, dir, algo) {
   const t0m = performance.now();
   let ms = mergeSort([...data], field);
-  const mergeTime = (performance.now() - t0m).toFixed(2);
-
+  document.getElementById('time-merge').textContent = (performance.now() - t0m).toFixed(2) + ' ms';
   const t0q = performance.now();
   let qs = quickSort([...data], field);
-  const quickTime = (performance.now() - t0q).toFixed(2);
-
-  document.getElementById('time-merge').textContent = mergeTime + ' ms';
-  document.getElementById('time-quick').textContent = quickTime + ' ms';
-
+  document.getElementById('time-quick').textContent = (performance.now() - t0q).toFixed(2) + ' ms';
   let result = algo === 'quick' ? qs : ms;
   if (dir === 'desc') result = result.reverse();
   return result;
 }
 
-// ── Binary search by date ────────────────────────────────────────────────────
-function binarySearchDate(arr, targetDate) {
+function binarySearchDate(arr, target) {
   let lo = 0, hi = arr.length - 1;
-  const results = [];
-  // find any hit
   while (lo <= hi) {
     const mid = Math.floor((lo + hi) / 2);
-    if (arr[mid].date === targetDate) {
-      // expand to all rows with that date
+    if (arr[mid].date === target) {
       let l = mid, r = mid;
-      while (l > 0 && arr[l-1].date === targetDate) l--;
-      while (r < arr.length - 1 && arr[r+1].date === targetDate) r++;
-      return arr.slice(l, r + 1);
+      while (l > 0 && arr[l-1].date === target) l--;
+      while (r < arr.length-1 && arr[r+1].date === target) r++;
+      return arr.slice(l, r+1);
     }
-    arr[mid].date < targetDate ? lo = mid + 1 : hi = mid - 1;
+    arr[mid].date < target ? lo = mid+1 : hi = mid-1;
   }
   return [];
 }
 
-// ── Filters ──────────────────────────────────────────────────────────────────
 function applyFilters() {
-  const fruit   = document.getElementById('sel-fruit').value;
-  const state   = document.getElementById('sel-state').value;
-  const from    = document.getElementById('date-from').value;
-  const to      = document.getElementById('date-to').value;
-  const elNino  = document.getElementById('sel-elnino').value;
-  const field   = document.getElementById('sel-sort-field').value;
-  const dir     = document.getElementById('sel-sort-dir').value;
-  const algo    = document.getElementById('sel-algo').value;
-
+  const fruit = document.getElementById('sel-fruit').value;
+  const state = document.getElementById('sel-state').value;
+  const from  = document.getElementById('date-from').value;
+  const to    = document.getElementById('date-to').value;
+  const el    = document.getElementById('sel-elnino').value;
+  const field = document.getElementById('sel-sort-field').value;
+  const dir   = document.getElementById('sel-sort-dir').value;
+  const algo  = document.getElementById('sel-algo').value;
   let data = allData.filter(r => {
-    if (fruit  && r.fruit !== fruit)  return false;
-    if (state  && r.state !== state)  return false;
-    if (from   && r.date  < from)     return false;
-    if (to     && r.date  > to)       return false;
-    if (elNino === '1' && !r.is_el_nino) return false;
-    if (elNino === '0' &&  r.is_el_nino) return false;
+    if (fruit && r.fruit !== fruit) return false;
+    if (state && r.state !== state) return false;
+    if (from  && r.date < from)    return false;
+    if (to    && r.date > to)      return false;
+    if (el === '1' && !r.is_el_nino) return false;
+    if (el === '0' &&  r.is_el_nino) return false;
     return true;
   });
-
   filtered = sortData(data, field, dir, algo);
   currentPage = 0;
-  renderStats();
-  renderChart();
-  renderTable();
+  renderStats(); renderChart(); renderTable();
 }
 
 function resetFilters() {
-  ['sel-fruit','sel-state','sel-elnino','sel-sort-field','sel-algo'].forEach(id => {
-    document.getElementById(id).value = id === 'sel-sort-field' ? 'date' : id === 'sel-algo' ? 'merge' : '';
-  });
+  document.getElementById('sel-fruit').value = '';
+  document.getElementById('sel-state').value = '';
+  document.getElementById('sel-elnino').value = '';
+  document.getElementById('sel-sort-field').value = 'date';
   document.getElementById('sel-sort-dir').value = 'asc';
-  document.getElementById('date-from').value = '';
-  document.getElementById('date-to').value = '';
+  document.getElementById('sel-algo').value = 'merge';
+  document.getElementById('date-from').value = allData.length ? allData.map(r=>r.date).sort()[0] : '';
+  document.getElementById('date-to').value   = allData.length ? allData.map(r=>r.date).sort().pop() : '';
   applyFilters();
 }
 
-// ── Stats ────────────────────────────────────────────────────────────────────
 function renderStats() {
   const n = filtered.length;
-  const avg = n ? (filtered.reduce((s,r) => s + r.modal_price, 0) / n).toFixed(0) : 0;
-  const fruits = new Set(filtered.map(r => r.fruit)).size;
+  const avg = n ? (filtered.reduce((s,r) => s+r.modal_price, 0)/n).toFixed(0) : 0;
   const elRows = filtered.filter(r => r.is_el_nino).length;
-  const pct = n ? Math.round(elRows / n * 100) : 0;
-
-  document.getElementById('stat-rows').textContent   = n.toLocaleString();
-  document.getElementById('stat-avg').textContent    = '₹' + avg;
-  document.getElementById('stat-fruits').textContent = fruits;
-  document.getElementById('stat-elnino-pct').textContent = pct + '%';
-  document.getElementById('tbl-count').textContent   = n.toLocaleString() + ' rows';
+  document.getElementById('stat-rows').textContent = n.toLocaleString();
+  document.getElementById('stat-avg').textContent  = '₹' + avg;
+  document.getElementById('stat-fruits').textContent = new Set(filtered.map(r=>r.fruit)).size;
+  document.getElementById('stat-elnino-pct').textContent = n ? Math.round(elRows/n*100)+'%' : '0%';
+  document.getElementById('tbl-count').textContent = n.toLocaleString() + ' rows';
 }
 
-// ── Chart ────────────────────────────────────────────────────────────────────
 function renderChart() {
-  // Group by month, compute median price and el_nino flag
   const byMonth = {};
   filtered.forEach(r => {
-    const m = r.date.slice(0, 7);
+    const m = r.date.slice(0,7);
     if (!byMonth[m]) byMonth[m] = { prices: [], el: false };
     byMonth[m].prices.push(r.modal_price);
     if (r.is_el_nino) byMonth[m].el = true;
   });
-
   const months = Object.keys(byMonth).sort();
-  const prices = months.map(m => {
-    const p = byMonth[m].prices.sort((a,b) => a-b);
-    return p[Math.floor(p.length / 2)];
-  });
+  const prices = months.map(m => { const p = byMonth[m].prices.sort((a,b)=>a-b); return p[Math.floor(p.length/2)]; });
   const elMonths = months.map(m => byMonth[m].el);
-
-  const bgColors = elMonths.map(el => el ? 'rgba(245,166,35,0.25)' : 'rgba(76,175,110,0.15)');
-  const borderColors = elMonths.map(el => el ? '#f5a623' : '#4caf6e');
-
   if (chart) chart.destroy();
-
-  const ctx = document.getElementById('price-chart').getContext('2d');
-  chart = new Chart(ctx, {
+  const barThickness = months.length < 6 ? 40 : months.length < 12 ? 24 : undefined;
+  chart = new Chart(document.getElementById('price-chart').getContext('2d'), {
     type: 'bar',
-    data: {
-      labels: months,
-      datasets: [{
-        label: 'Median ₹/kg',
-        data: prices,
-        backgroundColor: bgColors,
-        borderColor: borderColors,
-        borderWidth: 1.5,
-        borderRadius: 3,
-      }]
-    },
+    data: { labels: months, datasets: [{ label: 'Median ₹/kg', data: prices,
+      backgroundColor: elMonths.map(e => e ? 'rgba(245,166,35,0.25)' : 'rgba(76,175,110,0.15)'),
+      borderColor: elMonths.map(e => e ? '#f5a623' : '#4caf6e'),
+      borderWidth: 1.5, borderRadius: 4, barThickness, maxBarThickness: 48 }] },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `₹${ctx.raw.toFixed(0)}/kg`,
-            afterLabel: (ctx) => elMonths[ctx.dataIndex] ? '🌊 El Niño month' : ''
-          }
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        backgroundColor: '#1c3826', borderColor: '#2a4a34', borderWidth: 1,
+        titleColor: '#d4e8d8', bodyColor: '#6a9070',
+        callbacks: {
+          label: c => `  ₹${c.raw.toFixed(2)}/kg`,
+          afterLabel: c => elMonths[c.dataIndex] ? '  🌊 El Niño month' : '  ○ Neutral'
         }
-      },
+      }},
       scales: {
-        x: {
-          ticks: { color: '#6a9070', font: { size: 10 }, maxRotation: 45 },
-          grid: { color: 'rgba(42,74,52,0.4)' }
-        },
-        y: {
-          ticks: { color: '#6a9070', font: { size: 10 }, callback: v => '₹' + v },
-          grid: { color: 'rgba(42,74,52,0.4)' }
-        }
+        x: { ticks: { color: '#6a9070', font: { size: 10 }, maxRotation: 45 }, grid: { color: 'rgba(42,74,52,0.3)' } },
+        y: { beginAtZero: false, ticks: { color: '#6a9070', font: { size: 10 }, callback: v => '₹'+v.toFixed(0) }, grid: { color: 'rgba(42,74,52,0.3)' } }
       }
     }
   });
 }
 
-// ── Table ────────────────────────────────────────────────────────────────────
 function renderTable() {
-  const start = currentPage * PAGE_SIZE;
-  const page  = filtered.slice(start, start + PAGE_SIZE);
-
-  const rows = page.map(r => `
-    <tr class="${r.is_el_nino ? 'el-nino-row' : ''}">
-      <td>${r.date}</td>
-      <td>${r.fruit}</td>
-      <td>${r.state}</td>
-      <td style="font-family:'Space Mono',monospace;color:#fff">₹${r.modal_price.toFixed(0)}</td>
-      <td>${r.is_el_nino
-        ? `<span class="pill el">El Niño (${r.oni_strength > 0 ? '+' : ''}${r.oni_strength})</span>`
-        : `<span class="pill neutral">${r.oni_strength < 0 ? 'La Niña' : 'Neutral'}</span>`}
-      </td>
-    </tr>`).join('');
-
-  document.getElementById('tbl-container').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Fruit</th>
-          <th>State</th>
-          <th>Price</th>
-          <th>El Niño</th>
-        </tr>
-      </thead>
-      <tbody>${rows || '<tr><td colspan="5" class="empty">No records match the current filters.</td></tr>'}</tbody>
-    </table>`;
-
-  renderPagination();
-}
-
-function renderPagination() {
-  const total = Math.ceil(filtered.length / PAGE_SIZE);
-  if (total <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
-
-  const prev = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>← Prev</button>`;
-  const next = `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=total-1?'disabled':''}>Next →</button>`;
-  const info = `Page ${currentPage+1} of ${total}`;
-
-  document.getElementById('pagination').innerHTML = prev + `<span>${info}</span>` + next;
+  const page = filtered.slice(currentPage*PAGE_SIZE, (currentPage+1)*PAGE_SIZE);
+  document.getElementById('tbl-container').innerHTML = `<table><thead><tr>
+    <th>Date</th><th>Fruit</th><th>State</th><th>Price</th><th>El Niño</th>
+  </tr></thead><tbody>${page.map(r => `<tr class="${r.is_el_nino?'el-nino-row':''}">
+    <td>${r.date}</td><td>${r.fruit}</td><td>${r.state}</td>
+    <td style="font-family:'Space Mono',monospace;color:#fff">₹${r.modal_price.toFixed(0)}</td>
+    <td>${r.is_el_nino ? `<span class="pill el">El Niño (+${r.oni_strength})</span>` : `<span class="pill neutral">${r.oni_strength<0?'La Niña':'Neutral'}</span>`}</td>
+  </tr>`).join('') || '<tr><td colspan="5" class="empty">No records match.</td></tr>'}</tbody></table>`;
+  const total = Math.ceil(filtered.length/PAGE_SIZE);
+  document.getElementById('pagination').innerHTML = total <= 1 ? '' :
+    `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>← Prev</button>
+     <span>Page ${currentPage+1} of ${total}</span>
+     <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=total-1?'disabled':''}>Next →</button>`;
 }
 
 function goPage(n) { currentPage = n; renderTable(); window.scrollTo(0,0); }
 
-// ── Date lookup ──────────────────────────────────────────────────────────────
 function lookupDate() {
   const d = document.getElementById('date-lookup').value;
   const el = document.getElementById('lookup-result');
   if (!d) { el.textContent = 'Pick a date first.'; return; }
-
-  const sorted = [...allData].sort((a,b) => a.date.localeCompare(b.date));
-  const hits = binarySearchDate(sorted, d);
-
-  if (!hits.length) {
-    el.innerHTML = `<span style="color:var(--red)">No data for ${d}</span>`;
-    return;
-  }
-
-  el.innerHTML = hits.map(r =>
-    `<b style="color:#fff">${r.fruit}</b> · ${r.state}<br>₹${r.modal_price.toFixed(0)}/kg ${r.is_el_nino ? '🌊' : ''}<br>`
-  ).join('<br>');
+  const hits = binarySearchDate([...allData].sort((a,b)=>a.date.localeCompare(b.date)), d);
+  el.innerHTML = hits.length
+    ? hits.map(r => `<b style="color:#fff">${r.fruit}</b> · ${r.state}<br>₹${r.modal_price.toFixed(0)}/kg ${r.is_el_nino?'🌊':''}<br>`).join('<br>')
+    : `<span style="color:var(--red)">No data for ${d}</span>`;
 }
 
-// ── Bootstrap ────────────────────────────────────────────────────────────────
 async function init() {
   try {
     const res = await fetch(CSV_URL);
     if (!res.ok) throw new Error('CSV not found');
-    const text = await res.text();
-    allData = parseCSV(text);
-
+    allData = parseCSV(await res.text());
     if (!allData.length) throw new Error('CSV is empty');
-
-    // Populate dropdowns
-    const fruits = [...new Set(allData.map(r => r.fruit))].sort();
-    const states = [...new Set(allData.map(r => r.state))].sort();
-    const fSel = document.getElementById('sel-fruit');
-    const sSel = document.getElementById('sel-state');
-    fruits.forEach(f => fSel.innerHTML += `<option value="${f}">${f}</option>`);
-    states.forEach(s => sSel.innerHTML += `<option value="${s}">${s}</option>`);
-
-    // Header badges
-    const dates = allData.map(r => r.date).sort();
-    const latest = dates[dates.length - 1];
-    const elCount = allData.filter(r => r.is_el_nino).length;
-    const elPct = Math.round(elCount / allData.length * 100);
-
-    document.getElementById('badge-rows').textContent  = allData.length.toLocaleString() + ' rows';
-    document.getElementById('badge-date').textContent  = 'Latest: ' + latest;
-    document.getElementById('badge-elnino').textContent = `El Niño: ${elPct}% of data`;
-
-    // Set default date range
+    const fruits = [...new Set(allData.map(r=>r.fruit))].sort();
+    const states = [...new Set(allData.map(r=>r.state))].sort();
+    fruits.forEach(f => document.getElementById('sel-fruit').innerHTML += `<option value="${f}">${f}</option>`);
+    states.forEach(s => document.getElementById('sel-state').innerHTML += `<option value="${s}">${s}</option>`);
+    const dates = allData.map(r=>r.date).sort();
+    document.getElementById('badge-rows').textContent = allData.length.toLocaleString() + ' rows';
+    document.getElementById('badge-date').textContent = 'Latest: ' + dates[dates.length-1];
+    document.getElementById('badge-elnino').textContent = `El Niño: ${Math.round(allData.filter(r=>r.is_el_nino).length/allData.length*100)}% of data`;
     document.getElementById('date-from').value = dates[0];
-    document.getElementById('date-to').value   = latest;
-
+    document.getElementById('date-to').value   = dates[dates.length-1];
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('content').style.display = 'flex';
-
+    document.getElementById('content').style.flexDirection = 'column';
+    document.getElementById('content').style.gap = '24px';
     applyFilters();
-
-  } catch (err) {
+  } catch(err) {
     document.getElementById('loading-state').innerHTML =
-      `<div style="color:var(--red);text-align:center">
-        <div style="font-size:1.5rem;margin-bottom:8px">⚠</div>
-        <b>Could not load data</b><br>
-        <span style="font-size:0.75rem;color:var(--muted);margin-top:6px;display:block">
-          Make sure fruit_prices_clean.csv is in the same folder as this file.<br>
-          Error: ${err.message}
-        </span>
-      </div>`;
+      `<div style="color:var(--red);text-align:center"><div style="font-size:1.5rem;margin-bottom:8px">⚠</div>
+      <b>Could not load data</b><br><span style="font-size:0.75rem;color:var(--muted);margin-top:6px;display:block">
+      Make sure fruit_prices_clean.csv is in the repo.<br>Error: ${err.message}</span></div>`;
   }
 }
-
 init();
 </script>
 </body>
